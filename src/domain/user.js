@@ -6,8 +6,6 @@ const defaultProfileUrl =
 
 export default class User {
   /**
-   * This is JSDoc - a way for us to tell other developers what types functions/methods
-   * take as inputs, what types they return, and other useful information that JS doesn't have built in
    * @tutorial https://www.valentinog.com/blog/jsdoc
    *
    * @param { { id: int, cohortId: int, email: string, profile: { firstName: string, lastName: string, bio: string : string } } } user
