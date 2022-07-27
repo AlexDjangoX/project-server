@@ -1,25 +1,27 @@
 import dbClient from '../utils/dbClient.js';
 
-export default class AlbumArt {
-  static fromDb(albumArt) {
-    return new AlbumArt(
-      albumArt.id,
-      albumArt.idAlbum,
-      albumArt.idArtist,
-      albumArt.intYearReleased,
-      albumArt.strAlbum,
-      albumArt.strAlbumThumb,
-      albumArt.strArtist,
-      albumArt.strDescriptionEN,
-      albumArt.strGenre,
-      albumArt.strMusicBrainzID,
-      albumArt.reviewScore,
-      albumArt.myReview
+export default class Album {
+  static fromDb(album) {
+    return new Album(
+      album.userId,
+      album.idAlbum,
+      album.idArtist,
+      album.intYearReleased,
+      album.strAlbum,
+      album.strAlbumThumb,
+      album.strArtist,
+      album.strDescriptionEN,
+      album.strGenre,
+      album.strMusicBrainzID,
+      album.reviewScore,
+      album.myReview
+      // album.id
     );
   }
 
   static async fromJson(json) {
     const {
+      userId,
       id_album,
       id_artist,
       year_released,
@@ -33,8 +35,8 @@ export default class AlbumArt {
       my_review,
     } = json;
 
-    return new AlbumArt(
-      null,
+    return new Album(
+      userId,
       id_album,
       id_artist,
       year_released,
@@ -50,7 +52,7 @@ export default class AlbumArt {
   }
 
   constructor(
-    id,
+    userId,
     idAlbum,
     idArtist,
     intYearReleased,
@@ -61,9 +63,12 @@ export default class AlbumArt {
     strGenre,
     strMusicBrainzID,
     reviewScore,
-    myReview
+    myReview,
+    id,
+    createdAt,
+    updatedAt
   ) {
-    this.id = id;
+    this.userId = userId;
     this.idAlbum = idAlbum;
     this.idArtist = idArtist;
     this.intYearReleased = intYearReleased;
@@ -75,13 +80,18 @@ export default class AlbumArt {
     this.strMusicBrainzID = strMusicBrainzID;
     this.reviewScore = reviewScore;
     this.myReview = myReview;
+    this.id = id;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
-  toJson() {
+  toJSON() {
     return {
-      albumArt: {
-        id: this.id,
+      album: {
+        userId: this.userId,
         idAlbum: this.idAlbum,
+        id: this.id,
+
         idArtist: this.idArtist,
         intYearReleased: this.intYearReleased,
         strAlbum: this.strAlbum,
@@ -92,9 +102,15 @@ export default class AlbumArt {
         strMusicBrainzID: this.strMusicBrainzID,
         reviewScore: this.reviewScore,
         myReview: this.myReview,
+        userId: this.userId,
       },
     };
   }
+
+  /**
+   *
+   * @returns {Album}
+   */
 
   async save() {
     const createdAlbum = await dbClient.albumArt.create({
@@ -110,26 +126,37 @@ export default class AlbumArt {
         strMusicBrainzID: this.strMusicBrainzID,
         reviewScore: this.reviewScore,
         myReview: this.myReview,
+        user: {
+          connect: {
+            id: this.userId,
+          },
+        },
       },
       include: {
         user: true,
       },
     });
-    return AlbumArt.fromDb(createdAlbum);
+    return Album.fromDb(createdAlbum);
   }
 
-  static async findById(id) {
-    const foundAlbumArt = await dbClient.albumArt.findUnique({
+  static async _findByUnique(key, value) {
+    const foundAlbum = await dbClient.albumArt.findFirst({
       where: {
-        id,
+        [key]: value,
       },
       include: {
         user: true,
       },
     });
-    if (foundAlbumArt) {
-      return AlbumArt.fromDb(foundAlbumArt);
+
+    if (foundAlbum) {
+      return Album.fromDb(foundAlbum);
     }
+
     return null;
+  }
+
+  static async findByIdAlbum(idAlbum) {
+    return Album._findByUnique('idAlbum', idAlbum);
   }
 }
