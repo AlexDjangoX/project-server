@@ -10,7 +10,7 @@ import { validateAuthentication } from '../middleware/auth.js';
 const router = Router();
 
 router.post('/login', login);
-router.post('/reset-password', resetPassword);
+router.post('/reset-password', validateAuthentication, resetPassword);
 router.post('/reset-forgot-password-link', resetForgotPasswordLink);
 router.post('/reset-forgot-password', resetForgotPassword);
 

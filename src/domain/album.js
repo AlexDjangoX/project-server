@@ -14,7 +14,9 @@ export default class Album {
       album.strGenre,
       album.strMusicBrainzID,
       album.reviewScore,
-      album.myReview
+      album.myReview,
+      album.createdAt,
+      album.updatedAt
       // album.id
     );
   }
@@ -91,7 +93,6 @@ export default class Album {
         userId: this.userId,
         idAlbum: this.idAlbum,
         id: this.id,
-
         idArtist: this.idArtist,
         intYearReleased: this.intYearReleased,
         strAlbum: this.strAlbum,
@@ -103,6 +104,8 @@ export default class Album {
         reviewScore: this.reviewScore,
         myReview: this.myReview,
         userId: this.userId,
+        createdAt: this.createdAt,
+        updatedAt: this.updatedAt,
       },
     };
   }
