@@ -1,8 +1,12 @@
 import { Router } from 'express';
-import { create } from '../controllers/album.js';
+import {
+  createNewAlbum,
+  retrieveAlbumsByUserId,
+} from '../controllers/album.js';
 
 const router = Router();
 
-router.post('/', create);
+router.post('/:id', createNewAlbum);
+router.get('/:id', retrieveAlbumsByUserId);
 
 export default router;

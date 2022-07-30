@@ -1,7 +1,8 @@
 import Album from '../domain/album.js';
+import User from '../domain/user.js';
 import { sendDataResponse, sendMessageResponse } from '../utils/responses.js';
 
-export const create = async (req, res) => {
+export const createNewAlbum = async (req, res) => {
   const albumToCreate = await Album.fromJson(req.body);
   const id = albumToCreate.idAlbum;
 
@@ -17,5 +18,25 @@ export const create = async (req, res) => {
   } catch (error) {
     console.error('something went wrong', error.message);
     return sendMessageResponse(res, 500, 'Unable to create new album');
+  }
+};
+
+export const retrieveAlbumsByUserId = async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    const existingUser = await User.findById(id);
+
+    if (!existingUser) {
+      return sendDataResponse(res, 400, { email: 'Please provide valid ID' });
+    }
+
+    const albums = await Album.findAll(id);
+    if (albums.length === 0) {
+      throw new Error(`Albums not found`);
+    }
+    const data = { albums };
+    return sendDataResponse(res, 200, data);
+  } catch (err) {
+    return sendDataResponse(res, 400, { err: err.message });
   }
 };

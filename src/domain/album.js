@@ -162,4 +162,17 @@ export default class Album {
   static async findByIdAlbum(idAlbum) {
     return Album._findByUnique('idAlbum', idAlbum);
   }
+
+  static async findAll(id) {
+    const foundAlbums = await dbClient.albumArt.findMany({
+      where: {
+        userId: id,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return foundAlbums.map((album) => Album.fromDb(album));
+  }
 }
