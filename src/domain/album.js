@@ -15,9 +15,9 @@ export default class Album {
       album.strMusicBrainzID,
       album.reviewScore,
       album.myReview,
+      album.id,
       album.createdAt,
       album.updatedAt
-      // album.id
     );
   }
 
@@ -35,6 +35,7 @@ export default class Album {
       music_brainz,
       review_score,
       my_review,
+      id,
     } = json;
 
     return new Album(
@@ -49,7 +50,8 @@ export default class Album {
       genre,
       music_brainz,
       review_score,
-      my_review
+      my_review,
+      id
     );
   }
 
@@ -92,7 +94,6 @@ export default class Album {
       album: {
         userId: this.userId,
         idAlbum: this.idAlbum,
-        id: this.id,
         idArtist: this.idArtist,
         intYearReleased: this.intYearReleased,
         strAlbum: this.strAlbum,
@@ -103,7 +104,7 @@ export default class Album {
         strMusicBrainzID: this.strMusicBrainzID,
         reviewScore: this.reviewScore,
         myReview: this.myReview,
-        userId: this.userId,
+        id: this.id,
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
       },
@@ -129,6 +130,7 @@ export default class Album {
         strMusicBrainzID: this.strMusicBrainzID,
         reviewScore: this.reviewScore,
         myReview: this.myReview,
+        id: this.id,
         user: {
           connect: {
             id: this.userId,
@@ -174,5 +176,13 @@ export default class Album {
     });
 
     return foundAlbums.map((album) => Album.fromDb(album));
+  }
+
+  static async delete(foundId) {
+    await dbClient.albumArt.delete({
+      where: {
+        id: foundId,
+      },
+    });
   }
 }

@@ -8,7 +8,7 @@ export default class User {
   /**
    * @tutorial https://www.valentinog.com/blog/jsdoc
    *
-   * @param { { id: int, cohortId: int, email: string, profile: { firstName: string, lastName: string, bio: string : string } } } user
+   * @param { { id: int,  email: string, profile: { firstName: string, lastName: string, bio: string : string } } } user
    * @returns {User}
    */
   static fromDb(user) {

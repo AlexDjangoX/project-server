@@ -38,7 +38,6 @@ export const login = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   const { oldPassword, newPassword, email } = req.body;
-  console.log('REQUEST_BODY : ', req.body);
   try {
     const existingUser = await User.findByEmail(email);
 
@@ -112,7 +111,7 @@ export const resetForgotPasswordLink = async (req, res) => {
 
 export const resetForgotPassword = async (req, res) => {
   const { id, token, newPassword } = req.body;
-  console.log('RESET_FORGOT_PASSWORD : ', req.body);
+
   try {
     const existingUser = await User.findById(Number(id));
 

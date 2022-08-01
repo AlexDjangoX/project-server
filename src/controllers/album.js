@@ -5,6 +5,7 @@ import { sendDataResponse, sendMessageResponse } from '../utils/responses.js';
 export const createNewAlbum = async (req, res) => {
   const albumToCreate = await Album.fromJson(req.body);
   const id = albumToCreate.idAlbum;
+  console.log(albumToCreate);
 
   try {
     const existingAlbum = await Album.findByIdAlbum(id);
@@ -35,6 +36,18 @@ export const retrieveAlbumsByUserId = async (req, res) => {
       throw new Error(`Albums not found`);
     }
     const data = { albums };
+    return sendDataResponse(res, 200, data);
+  } catch (err) {
+    return sendDataResponse(res, 400, { err: err.message });
+  }
+};
+
+export const deleteAlbumFromFavorites = async (req, res) => {
+  const albumId = req.body.id_album;
+
+  try {
+    if (!albumId) throw new Error('The ID you have provided is incorrect');
+    const data = await Album.delete(albumId);
     return sendDataResponse(res, 200, data);
   } catch (err) {
     return sendDataResponse(res, 400, { err: err.message });
