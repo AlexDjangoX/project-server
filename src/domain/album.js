@@ -165,6 +165,10 @@ export default class Album {
     return Album._findByUnique('idAlbum', idAlbum);
   }
 
+  static async findById(id) {
+    return Album._findByUnique('id', id);
+  }
+
   static async findAll(id) {
     const foundAlbums = await dbClient.albumArt.findMany({
       where: {
@@ -184,5 +188,18 @@ export default class Album {
         id: foundId,
       },
     });
+  }
+
+  static async updateAlbum(foundAlbumId, rating) {
+    const albumToUpdate = await dbClient.albumArt.update({
+      where: {
+        id: foundAlbumId,
+      },
+      data: {
+        reviewScore: rating,
+      },
+    });
+    console.log('INSIDE UPDATE : ', albumToUpdate);
+    return Album.fromDb(albumToUpdate);
   }
 }

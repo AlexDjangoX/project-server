@@ -53,3 +53,21 @@ export const deleteAlbumFromFavorites = async (req, res) => {
     return sendDataResponse(res, 400, { err: err.message });
   }
 };
+
+export const updateReviewRating = async (req, res) => {
+  const albumToUpdate = await Album.fromJson(req.body);
+  const id = albumToUpdate.id;
+  const rating = Number(albumToUpdate.reviewScore);
+
+  try {
+    const existingAlbum = await Album.findById(id);
+    if (!existingAlbum)
+      throw new Error('The ID you have provided is incorrect');
+    let data;
+    data = await Album.updateAlbum(id, rating);
+
+    return sendDataResponse(res, 200, data);
+  } catch (err) {
+    return sendDataResponse(res, 400, { err: err.message });
+  }
+};
